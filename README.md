@@ -68,7 +68,7 @@ cpanel-dnsonly | This group is for DNS Only servers
 **Roles**  
 
 Role Name | Description
-------------- | -------------
+:------------- | :-------------
 os-centos | OS updates, repositories, packages, users, passwords, ssh keys, ssh
 
 **Variables**  
