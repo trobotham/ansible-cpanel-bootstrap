@@ -1,0 +1,44 @@
+---
+# file: roles/os-centos/tasks/yum.yml
+#
+# os-centos Role
+# Task for handling yum
+#
+- name: yum | Ensure deltarpm is installed (before updating CentOS packages)
+  yum:
+    name: deltarpm
+    state: latest
+  tags: yum
+
+- name: yum | Import repo GPG key(s)
+  copy:
+    src: "{{ item }}"
+    dest: /etc/pki/rpm-gpg/
+    owner: root
+    group: root
+    mode: 644
+  with_items: gpg_keys
+  tags: yum
+
+- name: yum | Install extra repositories
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items: repo_rpms
+  ignore_errors: True
+  tags: yum
+
+- name: yum | Ensure yum packages are installed and kept updated
+  yum:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items: centos_core_packages
+  tags: yum
+
+- name: yum | Update CentOS packages
+  yum:
+    name: "*"
+    state: latest
+    update_cache: yes
+  tags: yum

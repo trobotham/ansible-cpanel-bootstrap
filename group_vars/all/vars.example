@@ -1,0 +1,79 @@
+#  ---
+#  # Variables listed here are applicable to all host groups
+#  # Rename this file to vars
+#
+#  ##########################
+#  ### Ansible Settings
+#  ansible_ssh_private_key_file: ~/.ssh/ansible
+#  ansible_ssh_user: ansible
+#  ansible_become: true
+#
+#  ##########################
+#  ### SYSTEM
+#  ##########################
+#  timezone: America/New_York
+#
+#  ##########################
+#  ### Server and Service Settings
+#  ##########################
+#  ntpservers:
+#    - 0.rhel.pool.ntp.org
+#    - 1.rhel.pool.ntp.org
+#    - 2.rhel.pool.ntp.org
+#    - 3.rhel.pool.ntp.org
+#
+#  ### SSH
+#  ssh_port: 22
+#  ssh_root_login: without-password
+#  ssh_password_auth: "no"
+#
+#  ##########################
+#  ### Installation and Use variables
+#  ##########################
+#  use_python: true
+#  use_ntp: true
+#  use_ssh: true
+#  use_locale: true
+#
+#  ##########################
+#  ### User Settings
+#  ##########################
+#  user_ssh_keys:
+#    - { name: someuser, key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/Fu4nic5cgntpSbfDVlGQjFBrU1uPqGm+j/Z29ws4qWq1UuoJwo3eTiH8cEHxPxUpno9VsvycMXjb3Q7LkTg8FbZ0voM3gSyH08d4cJNOMa2kKs/GZWxv5HsplPqjKLWTxX9HzIRztirGTNytNt39tZez8THxnDyyd+Ej/JOn3Cjn7Xa8fudFuhXq9HaXTDwYdRSLxE5dC1OlmFW5fSsc5ceZCTsZWvEThtrPGQGZ8WZEuu3rD0eiHCuIlUAcPhF196xUKR8oCayGZ17+nWfIM70kC9SCiNh2DrLb38EM79w/xYbIYA0RerDh73Kk4+nfMmB7X+LV1aGkLgd/ebel MY_KEY' }
+#
+#  ##########################
+#  ### Packages Settings
+#  ##########################
+#
+#  ## Yum
+#  centos_core_packages:
+#    - cronie
+#    - cronie-anacron
+#    - htop
+#    - git
+#    - man
+#    - rsync
+#    - sudo
+#    - vim
+#    - which
+#    - nano
+#    - curl
+#    - wget
+#    - python
+#    - python-pip
+#    - tmpwatch
+#    - dos2unix
+#    - iotop
+#    - sysstat
+#    - curl-devel
+#    - hdparm
+#
+#  ## Python
+#  python_packages:
+#    - pip
+#    - passlib
+#
+#  ##########################
+#  ### Encrypted in the Vault
+#  ##########################
+#  system_users: "{{ vault_system_users }}"

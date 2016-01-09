@@ -1,0 +1,14 @@
+#  ---
+#  # Variables listed here are applicable to all host groups
+#  # All variables should be prefixed with vault_ so as to be matched easily in the vars file
+#  # Rename this file to vault, add your secure content and encrypt this file with the following command:
+#  # ansible-vault encrypt group_vars/all/vault
+#
+#  ##### Run the following command to generate an encrypted password and replace XXXXXX with it.
+#  ##### echo 'import crypt,getpass; print crypt.crypt(getpass.getpass(), "$6$AC3bdCF7!")' | python -
+#
+#  ## Mapped to vars file without the vault_ prefix
+#
+#    vault_system_users:
+#      - { name: someuser, shell: /bin/bash, groups: wheel, password: 'XXXXXX' }
+#      - { name: someotheruser, password: 'XXXXXX' }

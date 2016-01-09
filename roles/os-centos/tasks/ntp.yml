@@ -1,0 +1,25 @@
+---
+# file: roles/os-centos/tasks/ntp.yml
+#
+# os-centos Role
+# Task for handling ntp
+#
+- name: ntp | Install ntp
+  yum:
+    name: ntp
+    state: present
+  tags: ntp
+
+- name: ntp | Configure ntp file
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+  tags: ntp
+  notify: restart ntp
+
+- name: ntp | Start the ntp service
+  service:
+    name: ntpd
+    state: started
+    enabled: yes
+  tags: ntp

@@ -1,0 +1,8 @@
+############################################
+## INVENTORY FILE FOR PRODUCTION USE ONLY ##
+############################################
+[cpanel-dnsonly]
+dns1.yourdomain.com
+
+[cpanel]
+cpanel1.yourdomain.com

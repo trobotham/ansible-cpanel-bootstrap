@@ -1,0 +1,12 @@
+---
+# file: roles/os-centos/tasks/python.yml
+#
+# os-centos Role
+# Task for handling the python packages
+#
+- name: python | install python packages
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items: python_packages
+  tags: python

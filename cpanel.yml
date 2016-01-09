@@ -1,0 +1,40 @@
+---
+##############################################################
+## ANSIBLE PLAYBOOK FOR CPANEL DEPLOYMENT TO CPANEL SERVERS ##
+##############################################################
+- name: cPanel Deployment to new CentOS 6.x Server
+  hosts: cpanel
+  any_errors_fatal: true
+  user: ansible
+  become: yes
+  roles:
+    - os-centos
+#    - os-cloudlinux
+#    - kernelcare
+#    - cpanel
+#    - app-postgresql
+#    - app-configserver
+#    - app-rfx
+#    - cpanel-plugins
+#    - app-rvskin
+#    - app-rvsitebuilder
+#    - app-softaculous
+#    - app-cloudflare
+#    - monitoring-icinga
+
+################################################################
+## ANSIBLE PLAYBOOK FOR CPANEL DEPLOYMENT TO DNS-ONLY SERVERS ##
+################################################################
+- name: cPanel Deployment to new CentOS 6.x Server
+  hosts: cpanel-dnsonly
+  any_errors_fatal: true
+  user: ansible
+  become: yes
+  roles:
+    - os-centos
+#    - kernelcare
+#    - cpanel
+#    - app-configserver
+#    - app-rfx
+#    - cpanel-plugins
+#    - monitoring-icinga

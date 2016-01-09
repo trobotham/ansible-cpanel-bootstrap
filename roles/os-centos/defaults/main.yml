@@ -1,0 +1,69 @@
+---
+# file: roles/os-centos/defaults/main.yml
+#
+# os-centos Role
+# Default variables for Role
+#
+
+### SYSTEM
+timezone: America/New_York
+text_editor: nano
+cron_email_address: "{{ cron_email_address }}"
+
+## NTP
+ntpservers:
+ - 0.rhel.pool.ntp.org
+ - 1.rhel.pool.ntp.org
+ - 2.rhel.pool.ntp.org
+ - 3.rhel.pool.ntp.org
+
+### YUM
+centos_core_packages:
+  - cronie
+  - cronie-anacron
+  - htop
+  - git
+  - man
+  - rsync
+  - sudo
+  - vim
+  - which
+  - nano
+  - curl
+  - wget
+  - python
+  - python-pip
+  - tmpwatch
+  - dos2unix
+  - iotop
+  - sysstat
+  - curl-devel
+  - hdparm
+
+gpg_keys:
+  - RPM-GPG-KEY-rpmforge-dag
+  - RPM-GPG-KEY-EPEL-6
+
+repo_rpms:
+  - http://repoforge.eecs.wsu.edu/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+  - http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+### PYTHON
+python_packages:
+  - pip
+  - passlib
+
+### SSH
+ssh_port: 22
+ssh_root_login: "yes"
+ssh_password_auth: "yes"
+
+### Users
+system_users: #placeholder
+user_ssh_keys: #placeholder
+
+### DEFAULT USE AND INSTALL VARIABLES
+use_python: true
+use_ntp: false
+use_ssh: false
+use_locale: true

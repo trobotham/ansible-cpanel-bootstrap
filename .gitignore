@@ -1,0 +1,6 @@
+.idea
+.vault-pass
+vars
+vault
+production
+host_vars/all

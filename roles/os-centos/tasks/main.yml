@@ -1,0 +1,41 @@
+---
+# file: roles/os-centos/tasks/main.yml
+#
+# os-centos Role
+# Task for handling the base CentOS config
+#
+
+### Yum package management
+- name: Include the yum tasks file
+  include: yum.yml
+  tags: yum
+
+### Python package management
+- name: Include the python tasks file
+  include: python.yml
+  when: python_packages is defined and (use_python is defined and use_python == true)
+  tags: python
+
+### NTP Configuration
+- name: Include the NTP tasks file
+  include: ntp.yml
+  when: use_ntp is defined and use_ntp == true
+  tags: ntp
+
+### User Management (non-root)
+- name: Include the users tasks file
+  include: users.yml
+  when: (system_users is defined) or (ssh_users is defined)
+  tags: users
+
+### SSH Management
+- name: Include the ssh tasks file
+  include: ssh.yml
+  when: use_ssh is defined and use_ssh == true
+  tags: ssh
+
+### locale Management
+- name: Include the local tasks file
+  include: locale.yml
+  when: use_locale is defined and use_locale == true
+  tags: locale

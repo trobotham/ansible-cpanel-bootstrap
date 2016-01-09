@@ -1,0 +1,28 @@
+---
+# file: roles/os-centos/tasks/yum.yml
+#
+# os-centos Role
+# Task for handling users
+#
+- name: users | Maintain non-root user accounts
+  user:
+    name: "{{ item.name }}"
+    shell: "{{ item.shell | default('/bin/false')  }}"
+    groups: "{{ item.groups | default() }}"
+    password: "{{ item.password }}"
+    append: yes
+    update_password: always
+    state: present
+  no_log: true
+  with_items: system_users
+  when: ((item.name is defined and item.name and item.name != 'root') and (item.state is undefined or (item.state is defined and item.state != 'absent')))
+  tags: users
+
+- name: users | maintain and deploy non-root ssh keys
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.key }}"
+  no_log: true
+  with_items: user_ssh_keys
+  when: (item.name is defined and item.name and item.name != 'root')
+  tags: users

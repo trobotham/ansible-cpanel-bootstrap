@@ -1,0 +1,30 @@
+# {{ ansible_managed }}
+Port {{ ssh_port | default(22) }}
+#AddressFamily any
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+
+Protocol 2
+SyslogFacility AUTHPRIV
+
+# Authentication:
+PermitRootLogin {{ ssh_root_login | default("without-password") }}
+PasswordAuthentication {{ ssh_password_auth | default("no") }}
+ChallengeResponseAuthentication no
+
+# GSSAPI options
+GSSAPIAuthentication no
+
+UsePAM yes
+
+AcceptEnv XMODIFIERS EDITOR LANG LC_*
+
+AllowAgentForwarding yes
+PermitTunnel no
+AllowTcpForwarding no
+X11Forwarding no
+PrintMotd yes
+UseDNS no
+
+# override default of no subsystems
+Subsystem       sftp    /usr/libexec/openssh/sftp-server
