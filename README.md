@@ -59,14 +59,16 @@ By default, we've only included a production file called production.example.  Re
 The group names in the file are simply a suggestion, you're welcome to make any changes as needed.
 
 **Inventory Groups**  
-Group Name  | Purpose
+
+Group Name | Purpose
 :------------- | :-------------
-cpanel  | This group should contain your cPanel servers
+cpanel | This group should contain your cPanel servers
 cpanel-dnsonly | This group is for DNS Only servers
 
 **Roles**  
-Role Name  | Description
-:------------- | :-------------
+
+Role Name | Description
+------------- | -------------
 os-centos | OS updates, repositories, packages, users, passwords, ssh keys, ssh
 
 **Variables**  
@@ -76,14 +78,16 @@ Refer [to this document](http://http://docs.ansible.com/ansible/playbooks_variab
 
 Some variables MUST be defined by you or certain tasks won't run.  Variables prefixed with "install_" are used to determine if a specific app should be installed.  Any install tasks will check if that variable is "true".  Variables prefixed with "use_" are used to determine if a specific role / task should be run (this may include installing a package like NTP but not an app like CloudLinux).  
 Below is a list of those variables.  
-Variable  | Default | Choices | Description
+
+Variable | Default | Choices | Description
 :------------- | :------------- | :------------- | :-------------
 install_cloudlinux | false | <ul><li>false</li><li>true</li></ul>  | should we install and configure CloudLinux?
 use_python | true | <ul><li>false</li><li>true</li></ul> | should we configure Python packages?
 use_ntp | false | <ul><li>false</li><li>true</li></ul>  | should ntp be installed and configured?
 
 **Supported Tags**  
-Tag Name  | Description
+
+Tag Name | Description
 :------------- | :-------------
 yum | Any yum related task
 
