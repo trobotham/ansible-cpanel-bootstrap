@@ -91,6 +91,11 @@ use_locale | true | <ul><li>false</li><li>true</li></ul>  | should the locale be
 Tag Name | Description
 :------------- | :-------------
 yum | Any yum related task
+python | Any python related task
+ntp | Any ntp related task
+users | Any user related task
+ssh | Any ssh server related task
+locale | Any locale server related task
 
 **Running a Play**  
 In the event of a failure, the play will stop for the failed host.  By declaring --force-handlers, any successful changes that require a service restart will still be applied.  
