@@ -84,6 +84,7 @@ Variable | Default | Choices | Description
 install_cloudlinux | false | <ul><li>false</li><li>true</li></ul>  | should we install and configure CloudLinux?
 use_python | true | <ul><li>false</li><li>true</li></ul> | should we configure Python packages?
 use_ntp | false | <ul><li>false</li><li>true</li></ul>  | should ntp be installed and configured?
+use_locale | true | <ul><li>false</li><li>true</li></ul>  | should the locale be configured?
 
 **Supported Tags**  
 
