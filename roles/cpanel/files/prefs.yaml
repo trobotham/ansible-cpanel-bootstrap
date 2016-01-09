@@ -1,0 +1,13 @@
+---
+"always_do_the_latest_phps": 1
+"always_do_the_oldest_phps": 0
+"check_httpd_after_each_test": 0
+"conf_levels": 0
+"disable_cloudlinux_infrastructure": 0
+"do_not_revert_on_conf_failure": 0
+"do_not_revert_on_test_failure": 0
+"move_broken_local_templates": 2
+"notify_cpanel": 1
+"prefer_profile_php_over_always_do_the_latest_phps": 0
+"prefer_profile_php_over_always_do_the_oldest_phps": 0
+"verbose": 1

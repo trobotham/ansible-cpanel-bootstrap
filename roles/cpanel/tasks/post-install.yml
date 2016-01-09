@@ -1,0 +1,27 @@
+---
+# file: roles/cpanel/tasks/post-install.yml
+#
+# cPanel Role
+# Task for handling custom settings after cPanel is installed
+#
+
+- name: cPanel config customization
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: "wwwacct.conf.j2", dest: "/etc/wwwacct.conf", mode: "0644" }
+  tags: cpanel
+
+- name:  disable the cPanel setup wizard
+  file:
+    path: /etc/.whostmgrft
+    state: touch
+    owner: root
+    group: root
+    mode: 0644
+  changed_when: false
+  tags: cpanel

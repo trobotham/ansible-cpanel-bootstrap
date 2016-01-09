@@ -1,0 +1,28 @@
+---
+# file: roles/cpanel/tasks/files.yml
+#
+# cPanel Role
+# Task for handling custom config files for cPanel
+#
+- name: Copy cPanel custom config Files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: "prefs.yaml", dest: "/var/cpanel/easy/apache/prefs.yaml", mode: "0644" }
+    - { src: "cpanel.config", dest: "/root/cpanel_profile/cpanel.config", mode: "0644" }
+    - { src: "cp_easyapache_profile.yaml", dest: "/etc/cp_easyapache_profile.yaml", mode: "0644" }
+  tags: cpanel
+
+- name:  disable the fast installation method and use the legacy installation method
+  file:
+    path: /etc/cpanel/disable_fast_install
+    state: touch
+    owner: root
+    group: root
+    mode: 0644
+  changed_when: false
+  tags: cpanel

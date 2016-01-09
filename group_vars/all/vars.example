@@ -74,6 +74,19 @@
 #    - passlib
 #
 #  ##########################
+#  ### cPanel Settings
+#  ##########################
+#
+#  ## cPanel options for wwwacct.conf
+#  nameserver_primary: ns1.yourdomain.com
+#  nameserver_secondary: ns2.yourdomain.com
+#  nameserver_tertiary: ## ns3 and ns4 are optional, ns1 and ns2 are 100% required!
+#  nameserver_quaternary: ## ns3 and ns4 are optional, ns1 and ns2 are 100% required!
+#
+#  cpanel_contact_pager: #optional (email address)
+#  cpanel_email_address: #optional (email address)
+
+#  ##########################
 #  ### Encrypted in the Vault
 #  ##########################
 #  system_users: "{{ vault_system_users }}"

@@ -11,7 +11,7 @@
     - os-centos
 #    - os-cloudlinux
 #    - kernelcare
-#    - cpanel
+    - cpanel
 #    - app-postgresql
 #    - app-configserver
 #    - app-rfx
@@ -33,7 +33,7 @@
   roles:
     - os-centos
 #    - kernelcare
-#    - cpanel
+#    - cpanel-dnsonly
 #    - app-configserver
 #    - app-rfx
 #    - cpanel-plugins

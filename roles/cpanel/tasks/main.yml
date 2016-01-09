@@ -1,0 +1,62 @@
+---
+# file: roles/cpanel/tasks/main.yml
+#
+# cpanel Role
+# Task for handling the cPanel config and install
+#
+
+- name: Check whether cPanel is installed
+  command: grep -Fxq "Thank you for installing cPanel" /var/log/cpanel-install.log
+  register: cpanel_check
+  always_run: true
+  ignore_errors: true
+  changed_when: false
+  tags: cpanel
+
+- name: Register cpanel_installed variable
+  set_fact:
+    cpanel_installed: true
+  when: cpanel_check.rc == 0
+  tags: cpanel
+
+- name: cPanel Package Pre-requisites
+  include: yum.yml
+  when: cpanel_installed is not defined
+
+- name: cPanel Folder Structure
+  include: folders.yml
+  when: cpanel_installed is not defined
+
+- name: cPanel Custom Configs
+  include: files.yml
+  when: cpanel_installed is not defined
+
+- name: cPanel Installer Task
+  include: install.yml
+  when: cpanel_installed is not defined
+
+- name: cPanel Post Install Task
+  include: post-install.yml
+  when: cpanel_install_completed is defined and cpanel_install_completed.changed
+
+- name: fail the play if the previous command did not succeed
+  fail:
+    msg: "cPanel is not installed, or the install failed.  Play aborting!"
+  when: cpanel_install_completed is not defined
+
+## Considerations
+# Installing cPanel creates /root/installer.lock
+# Installer logs to /var/log/cpanel-install.log
+# If the installer fails, both files may still exist even if cPanel is not installed
+# not sure how to handle a failed install or an ssh connection failure...
+
+#####################
+# If this happens:
+# TASK [cpanel : Install cPanel] *************************************************
+# fatal: [centos1.lithiumdev.com]: FAILED! => {"failed": true, "msg": "ERROR! Timeout (12s) waiting for privilege escalation prompt: "}
+#
+# The playbook can be re-ran, cPanel will detect that an install is in progress and not start it again
+# Ansible will just sit at the task:
+# TASK [cpanel : Install cPanel] *************************************************
+
+# NEVERMIND!!!  The command fails because installer.lock exists
