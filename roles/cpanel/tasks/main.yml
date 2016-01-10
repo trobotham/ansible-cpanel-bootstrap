@@ -13,9 +13,6 @@
   changed_when: false
   tags: cpanel
 
-- debug: msg={{ cpanel_check }}
-  tags: cpanel
-
 - name: Register cpanel_installed variable
   set_fact:
     cpanel_installed: true
