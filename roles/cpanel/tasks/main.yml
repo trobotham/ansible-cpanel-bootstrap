@@ -6,11 +6,14 @@
 #
 
 - name: Check whether cPanel is installed
-  command: grep -Fxq "Thank you for installing cPanel" /var/log/cpanel-install.log
+  command: grep -q "Congratulations! Your installation of cPanel & WHM" /var/log/cpanel-install.log
   register: cpanel_check
   always_run: true
-  ignore_errors: true
+  failed_when: false
   changed_when: false
+  tags: cpanel
+
+- debug: msg={{ cpanel_check }}
   tags: cpanel
 
 - name: Register cpanel_installed variable
