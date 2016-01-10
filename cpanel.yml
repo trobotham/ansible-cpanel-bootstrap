@@ -25,7 +25,7 @@
 ################################################################
 ## ANSIBLE PLAYBOOK FOR CPANEL DEPLOYMENT TO DNS-ONLY SERVERS ##
 ################################################################
-- name: cPanel Deployment to new CentOS 6.x Server
+- name: cPanel DNS Only Deployment to new CentOS 6.x Server
   hosts: cpanel-dnsonly
   any_errors_fatal: true
   user: ansible
