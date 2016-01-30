@@ -1,0 +1,150 @@
+---
+############## LogView ###################
+- name: Check if WHM LogView is installed
+  stat:
+    path: /usr/local/cpanel/whostmgr/cgi/logview/lview.cgi
+  register: whm_logview_check
+  changed_when: false
+  always_run: yes
+  tags: lithium_cpanel
+
+- name: Create whm_logview_installed variable.
+  set_fact:
+    whm_logview_installed: "{{ whm_logview_check.stat.exists|bool }}"
+  tags: lithium_cpanel
+
+- name: Copy LogView
+  copy:
+    src: usr/local/src/logview-install
+    dest: /usr/src/logview-install
+    mode: 0755
+  register: whm_logview_downloaded
+  when: whm_logview_installed == false
+  tags: lithium_cpanel
+
+- name: Install LogView
+  shell: /bin/sh /usr/src/logview-install
+  args:
+    chdir: /usr/src
+    creates: /usr/local/cpanel/whostmgr/cgi/logview/lview.cgi
+  when: whm_logview_downloaded|changed and whm_logview_installed == false
+  register: whm_logview_install_completed
+  tags: lithium_cpanel
+
+##################  RemoteMXWizard ###################
+- name: Check if WHM RemoteMXWizard is installed
+  stat:
+    path: /usr/local/cpanel/whostmgr/cgi/remotemxwizard/remotemxwizard.conf
+  register: whm_rmw_check
+  changed_when: false
+  always_run: yes
+  tags: lithium_cpanel
+
+- name: Create whm_rmw_installed variable.
+  set_fact:
+    whm_rmw_installed: "{{ whm_rmw_check.stat.exists|bool }}"
+  tags: lithium_cpanel
+
+- name: Download RMW tarball
+  get_url:
+    url: "http://store.gk-root.com/dl.php?type=d&id=141"
+    dest: /usr/src/rmw-1.0.3.tar
+  register: whm_rmw_downloaded
+  when: whm_rmw_installed == false
+  tags: lithium_cpanel
+
+- name: Unarchive RMW tarball
+  unarchive:
+    src: /usr/src/rmw-1.0.3.tar
+    dest: /usr/src
+    copy: no
+  register: whm_rmw_unarchived
+  when: whm_rmw_downloaded|changed and whm_rmw_installed == false
+  tags: lithium_cpanel
+
+- name: Install RMW
+  shell: /bin/bash /usr/src/rmw-1.0.3/rmw-installer.sh -install
+  args:
+    chdir: /usr/src/rmw-1.0.3
+    creates: /usr/local/cpanel/whostmgr/cgi/remotemxwizard/remotemxwizard.conf
+  when: whm_rmw_unarchived|changed and whm_rmw_installed == false
+  register: whm_rmw_install_completed
+  tags: lithium_cpanel
+
+- name: Maintain RMW Config
+  copy:
+    src: usr/local/cpanel/base/3rdparty/RemoteMxWizard/mail_providers/google_apps.conf
+    dest: /usr/local/cpanel/base/3rdparty/RemoteMxWizard/mail_providers/google_apps.conf
+  when: whm_rmw_installed == true
+  tags: lithium_cpanel
+
+##################  Account DNS Check ###################
+- name: Check if WHM Account DNS Check is installed
+  stat:
+    path: /usr/local/cpanel/whostmgr/docroot/cgi/addons/accountdnscheck/index.php
+  register: whm_adc_check
+  changed_when: false
+  always_run: yes
+  tags: lithium_cpanel
+
+- name: Create whm_adc_installed variable.
+  set_fact:
+    whm_adc_installed: "{{ whm_adc_check.stat.exists|bool }}"
+  tags: lithium_cpanel
+
+- name: Download Account DNS Check installer
+  get_url:
+    url: http://download.ndchost.com/accountdnscheck/latest-accountdnscheck
+    dest: /usr/src/latest-accountdnscheck
+  register: whm_adc_downloaded
+  when: whm_adc_installed == false
+  tags: lithium_cpanel
+
+- name: Install Account DNS Check
+  shell: /bin/bash /usr/src/latest-accountdnscheck
+  args:
+    chdir: /usr/src
+    creates: /usr/local/cpanel/whostmgr/docroot/cgi/addons/accountdnscheck/index.php
+  when: whm_adc_installed == false
+  register: whm_adc_install_completed
+  tags: lithium_cpanel
+
+##################  Domain Statistics ###################
+- name: Check if WHM Domain Statistics is installed
+  stat:
+    path: /usr/local/cpanel/whostmgr/docroot/cgi/domainstatistics/domainstatistics.conf
+  register: whm_ds_check
+  changed_when: false
+  always_run: yes
+  tags: lithium_cpanel
+
+- name: Create whm_ds_installed variable.
+  set_fact:
+    whm_ds_installed: "{{ whm_ds_check.stat.exists|bool }}"
+  tags: lithium_cpanel
+
+- name: Download Domain Statistics tarball
+  get_url:
+    url: "http://store.gk-root.com/dl.php?type=d&id=129"
+    dest: /usr/src/ds-3.6.2.tar
+  register: whm_ds_downloaded
+  when: whm_ds_installed == false
+  tags: lithium_cpanel
+
+- name: Unarchive Domain Statistics tarball
+  unarchive:
+    src: /usr/src/ds-3.6.2.tar
+    dest: /usr/src
+    copy: no
+  register: whm_ds_unarchived
+  when: whm_ds_downloaded|changed and whm_ds_installed == false
+  tags: lithium_cpanel
+
+- name: Install Domain Statistics
+  shell: /bin/bash /usr/src/ds-3.6.2/ds-installer.sh -install
+  args:
+    chdir: /usr/src/ds-3.6.2
+    creates: /usr/local/cpanel/whostmgr/docroot/cgi/domainstatistics/domainstatistics.conf
+  when: whm_ds_unarchived|changed and whm_ds_installed == false
+  register: whm_ds_install_completed
+  tags: lithium_cpanel

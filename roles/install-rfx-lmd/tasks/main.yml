@@ -1,0 +1,18 @@
+---
+- name: Check if RFX LMD is installed
+  stat:
+    path: /usr/local/sbin/maldet
+  register: rfx_lmd_check
+  changed_when: false
+  always_run: yes
+  tags: always
+
+- name: Create rfx_lmd_installed variable.
+  set_fact:
+    rfx_lmd_installed: "{{ rfx_lmd_check.stat.exists|bool }}"
+  always_run: yes
+  tags: always
+
+- name: Include the RFX LMD Installer Task
+  include: install.yml
+  when: rfx_lmd_installed != true and (install_rfx_lmd is defined and install_rfx_lmd == true)

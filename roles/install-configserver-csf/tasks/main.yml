@@ -1,0 +1,18 @@
+---
+- name: Check if CSF is installed
+  stat:
+    path: /usr/sbin/csf
+  register: csf_check
+  changed_when: false
+  always_run: yes
+  tags: always
+
+- name: Create csf_installed variable.
+  set_fact:
+    csf_installed: "{{ csf_check.stat.exists|bool }}"
+  always_run: yes
+  tags: always
+
+- name: Include the CSF Installer Task
+  include: install.yml
+  when: csf_installed != true and (install_csf is defined and install_csf == true)

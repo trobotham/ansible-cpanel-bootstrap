@@ -1,0 +1,40 @@
+---
+install_rfx_sim: false
+cron_email_address: you@domain.com
+
+sim_mod_settings:
+  - { option: sys.disk, setting: "off" }
+  - { option: sys.load, setting: "off" }
+  - { option: sys.network, setting: "off" }
+  - { option: init.arpwatch, setting: "off" }
+  - { option: init.cpanel, setting: "off" }
+  - { option: init.courier, setting: "off" }
+  - { option: init.dovecot, setting: "off" }
+  - { option: init.exim, setting: "off" }
+  - { option: init.httpd, setting: "off" }
+  - { option: init.mailmanctl, setting: "off" }
+  - { option: init.mailscanner, setting: "off" }
+  - { option: init.mrtg, setting: "off" }
+  - { option: init.mysqld, setting: "off" }
+  - { option: init.named, setting: "off" }
+  - { option: init.ntop, setting: "off" }
+  - { option: init.ocwhttpd, setting: "off" }
+  - { option: init.poprelay, setting: "off" }
+  - { option: init.postgresql, setting: "off" }
+  - { option: init.proftpd, setting: "off" }
+  - { option: init.psa, setting: "off" }
+  - { option: init.pure-ftpd, setting: "off" }
+  - { option: init.saslauthd, setting: "off" }
+  - { option: init.sendmail, setting: "off" }
+  - { option: init.smartd, setting: "off" }
+  - { option: init.snmpd, setting: "off" }
+  - { option: init.snortd, setting: "off" }
+  - { option: init.spamd, setting: "off" }
+  - { option: init.squid, setting: "off" }
+  - { option: init.sshd, setting: "off" }
+  - { option: init.syslog-ng, setting: "off" }
+  - { option: init.syslog, setting: "off" }
+  - { option: init.urchin4, setting: "off" }
+  - { option: init.vsftpd, setting: "off" }
+  - { option: init.webmin, setting: "off" }
+  - { option: init.xinetd, setting: "off" }

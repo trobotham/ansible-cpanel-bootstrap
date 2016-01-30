@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+
+{% for item in csf_rules %}
+{{ item.rule }} {% if item.comment is defined %}#{{ item.comment }}{% endif %}
+
+{% endfor %}

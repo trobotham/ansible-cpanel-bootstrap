@@ -1,0 +1,9 @@
+---
+- name: Install Comodo WAF mod_security
+  command: /usr/local/cpanel/scripts/modsec_vendor add https://waf.comodo.com/doc/meta_comodo_apache.yaml
+  args:
+    creates: /usr/local/apache/conf/modsec_vendor_configs/comodo_apache
+  ignore_errors: true
+  notify: restart apache
+  when: use_comodo_waf is defined and  use_comodo_waf == true
+  tags: modsecurity

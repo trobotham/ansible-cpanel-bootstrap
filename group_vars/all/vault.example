@@ -9,6 +9,13 @@
 #
 #  ## Mapped to vars file without the vault_ prefix
 #
-#    vault_system_users:
-#      - { name: someuser, shell: /bin/bash, groups: wheel, password: 'XXXXXX' }
-#      - { name: someotheruser, password: 'XXXXXX' }
+#  vault_system_users:
+#    - { name: someuser, shell: /bin/bash, groups: wheel, password: 'XXXXXX' }
+#    - { name: someotheruser, password: 'XXXXXX' }
+#
+#  vault_rvskin_user_password: "rvskin_user"
+#  vault_rvsitebuilder_dbuser: "rvsitebuilder_dbuser"
+#  vault_rvsitebuilder_dbpassword: "rvsitebuilder_dbpass"
+#  vault_rvsitebuilder_dbname: "rvsitebuilder_dbname"
+#  vault_cloudflare_key: "cloudflare_key"
+#  vault_attracta_key: "attracta_key"

@@ -1,0 +1,19 @@
+---
+- name: Install PostgreSQL
+  shell: "/usr/bin/yes | /scripts/installpostgres"
+  tags: install_pgsql
+
+- name: Symlink Postgres Socket
+  file:
+    src: /var/run/postgres/.s.PGSQL.5432
+    dest: /tmp/.s.PGSQL.5432
+    state: link
+  ignore_errors: yes
+  tags: install_pgsql
+
+- name: uncomment SOCK_DIR from /etc/sysconfig/postgres
+  lineinfile:
+    regexp: "SOCK_DIR"
+    line: SOCK_DIR=/var/run/postgres
+    dest: /etc/sysconfig/postgres
+  tags: install_pgsql

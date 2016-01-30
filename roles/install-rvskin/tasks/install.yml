@@ -1,0 +1,53 @@
+---
+- name: Ensure RVSkin directory exists
+  file:
+    path: /root/rvadmin
+    state: directory
+    mode: 0711
+  tags: install_rvskin
+
+- name: Download RVSkin bzipped tarball
+  get_url:
+    url: http://download.rvglobalsoft.com/download.php/download/rvskin-auto/saveto/rvauto.tar.bz2
+    dest: /root/rvadmin
+    force: yes
+  register: rvskin_downloaded
+  when: rvs_installed == false
+  tags: install_rvskin
+
+- name: Unarchive RVSkin source
+  unarchive:
+    src: /root/rvadmin/rvauto.tar.bz2
+    dest: /root/rvadmin
+    copy: no
+  register: rvskin_unarchived
+  when: rvskin_downloaded|changed and rvs_installed == false
+  tags: install_rvskin
+
+- name: Install RVSkin
+  command: '/usr/bin/perl /root/rvadmin/auto_rvskin.pl -p="{{ rvskin_user_password }}"'
+  args:
+    chdir: /root/rvadmin
+#    creates: /var/cpanel/apps/rvskin_cpanel.conf
+  async: 1800 # wait up-to 30 minutes
+  poll: 60 # check every 1 minutes
+  when: rvskin_unarchived|changed and rvs_installed == false
+  register: rvskin_install_completed
+  tags: install_rvskin
+
+#  mkdir /root/rvadmin
+#  cd /root/rvadmin
+#  wget -O /root/rvadmin/rvauto.tar.bz2 -c --no-check-certificate http://download.rvglobalsoft.com/download.php/download/rvskin-auto/saveto/rvauto.tar.bz2
+#  bunzip2 -d rvauto.tar.bz2
+#  tar -xvf rvauto.tar
+#  perl /root/rvadmin/auto_rvskin.pl -p={{ rvadmin_password }} ## rvadmin user password
+
+#- name: Install Subversion
+#  when: install_subversion == true
+
+#  cd /usr/src
+#  rm -fv rvsubversioninstall.sh
+#  wget --no-check-certificate http://download.rvglobalsoft.com/rvsubversioninstall.sh
+#  chmod +x rvsubversioninstall.sh
+#  ./rvsubversioninstall.sh
+#  perl /usr/local/rvglobalsoft/rvsubversion/install.pl

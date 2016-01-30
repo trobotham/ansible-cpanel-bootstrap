@@ -1,7 +1,4 @@
 #  ---
-#  # Variables listed here are applicable to all host groups
-#  # Rename this file to vars
-#
 #  ##########################
 #  ### Ansible Settings
 #  ansible_ssh_private_key_file: ~/.ssh/ansible
@@ -9,18 +6,8 @@
 #  ansible_become: true
 #
 #  ##########################
-#  ### SYSTEM
-#  ##########################
-#  timezone: America/New_York
-#
-#  ##########################
 #  ### Server and Service Settings
 #  ##########################
-#  ntpservers:
-#    - 0.rhel.pool.ntp.org
-#    - 1.rhel.pool.ntp.org
-#    - 2.rhel.pool.ntp.org
-#    - 3.rhel.pool.ntp.org
 #
 #  ### SSH
 #  ssh_port: 22
@@ -30,15 +17,40 @@
 #  ##########################
 #  ### Installation and Use variables
 #  ##########################
+#  ## USE
 #  use_python: true
 #  use_ntp: true
 #  use_ssh: true
 #  use_locale: true
+#  use_comodo_waf: true
+#
+#  ## INSTALL
+#  install_composer: true
+#  install_csf: true
+#  install_cmc: true
+#  install_cmm: true
+#  install_cmq: true
+#  install_cse: true
+#  install_cxs: false
+#  install_rvsitebuilder: false
+#  install_rvskin: false
+#  install_softaculous: false
+#  install_cloudflare: true
+#  install_pgsql: true
+#  install_attracta: true
+#  install_cloudlinux: true
+#  install_kernelcare: true
+#  install_cloudlinux_cagefs: true
+#  install_cloudlinux_alt: true
+#  install_rfx_lmd: true
+#  install_rfx_sim: true
+#  install_rfx_prm: true
+#  install_rfx_lsm: true
 #
 #  ##########################
 #  ### User Settings
 #  ##########################
-#  user_ssh_keys:
+#  ssh_users:
 #    - { name: someuser, key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/Fu4nic5cgntpSbfDVlGQjFBrU1uPqGm+j/Z29ws4qWq1UuoJwo3eTiH8cEHxPxUpno9VsvycMXjb3Q7LkTg8FbZ0voM3gSyH08d4cJNOMa2kKs/GZWxv5HsplPqjKLWTxX9HzIRztirGTNytNt39tZez8THxnDyyd+Ej/JOn3Cjn7Xa8fudFuhXq9HaXTDwYdRSLxE5dC1OlmFW5fSsc5ceZCTsZWvEThtrPGQGZ8WZEuu3rD0eiHCuIlUAcPhF196xUKR8oCayGZ17+nWfIM70kC9SCiNh2DrLb38EM79w/xYbIYA0RerDh73Kk4+nfMmB7X+LV1aGkLgd/ebel MY_KEY' }
 #
 #  ##########################
@@ -50,7 +62,6 @@
 #    - cronie
 #    - cronie-anacron
 #    - htop
-#    - git
 #    - man
 #    - rsync
 #    - sudo
@@ -77,16 +88,74 @@
 #  ### cPanel Settings
 #  ##########################
 #
-#  ## cPanel options for wwwacct.conf
+#  cpanel_maxemailsperhour: 500
+#  cron_email_address: cron@yourdomain.com
+#  cpanel_email_address: cpanel@yourdomain.com
+#  alerts_email_address: alerts@yourdomain.com
+#  cpanel_contact_pager: you@yourdomain.com
+#
 #  nameserver_primary: ns1.yourdomain.com
 #  nameserver_secondary: ns2.yourdomain.com
-#  nameserver_tertiary: ## ns3 and ns4 are optional, ns1 and ns2 are 100% required!
-#  nameserver_quaternary: ## ns3 and ns4 are optional, ns1 and ns2 are 100% required!
 #
-#  cpanel_contact_pager: #optional (email address)
-#  cpanel_email_address: #optional (email address)
-
+#  ### Cloudflare
+#  cloudflare_company: "Lithium Hosting, llc"
+#  cloudflare_mode: extended
+#
+#  ##########################
+#  ### CSF Settings
+#  ##########################
+#
+#  csf_rules:
+#    - { rule: 208.265.111.322, comment: '# some comment here' }
+#    - { rule: tcp|in|d=5666|s=208.265.111.323, comment: '# Nagios / Icinga' }
+#
+#  ##########################
+#  ### RFX SIM SETTINGS
+#  ##########################
+#  sim_mod_settings:
+#    - { option: sys.disk, setting: "on" }
+#    - { option: sys.load, setting: "on" }
+#    - { option: sys.network, setting: "off" }
+#    - { option: init.arpwatch, setting: "off" }
+#    - { option: init.cpanel, setting: "on" }
+#    - { option: init.courier, setting: "off" }
+#    - { option: init.dovecot, setting: "on" }
+#    - { option: init.exim, setting: "on" }
+#    - { option: init.httpd, setting: "on" }
+#    - { option: init.mailmanctl, setting: "on" }
+#    - { option: init.mailscanner, setting: "off" }
+#    - { option: init.mrtg, setting: "off" }
+#    - { option: init.mysqld, setting: "on" }
+#    - { option: init.named, setting: "off" }
+#    - { option: init.ntop, setting: "off" }
+#    - { option: init.ocwhttpd, setting: "off" }
+#    - { option: init.poprelay, setting: "off" }
+#    - { option: init.postgresql, setting: "on" }
+#    - { option: init.proftpd, setting: "off" }
+#    - { option: init.psa, setting: "off" }
+#    - { option: init.pure-ftpd, setting: "on" }
+#    - { option: init.saslauthd, setting: "off" }
+#    - { option: init.sendmail, setting: "off" }
+#    - { option: init.smartd, setting: "off" }
+#    - { option: init.snmpd, setting: "on" }
+#    - { option: init.snortd, setting: "off" }
+#    - { option: init.spamd, setting: "on" }
+#    - { option: init.squid, setting: "off" }
+#    - { option: init.sshd, setting: "on" }
+#    - { option: init.syslog-ng, setting: "off" }
+#    - { option: init.syslog, setting: "off" }
+#    - { option: init.urchin4, setting: "off" }
+#    - { option: init.vsftpd, setting: "off" }
+#    - { option: init.webmin, setting: "off" }
+#    - { option: init.xinetd, setting: "off" }
+#
 #  ##########################
 #  ### Encrypted in the Vault
 #  ##########################
 #  system_users: "{{ vault_system_users }}"
+#  rvskin_user_password: "{{ vault_rvskin_user_password }}"
+#  rvsitebuilder_dbuser: "{{ vault_rvsitebuilder_dbuser }}"
+#  rvsitebuilder_dbpassword: "{{ vault_rvsitebuilder_dbpassword }}"
+#  rvsitebuilder_dbname: "{{ vault_rvsitebuilder_dbname }}"
+#  cloudflare_key: "{{ vault_cloudflare_key }}"
+#  attracta_key: "{{ vault_attracta_key }}"

@@ -1,0 +1,18 @@
+---
+- name: Check if CSE is installed
+  stat:
+    path: /usr/local/cpanel/whostmgr/docroot/cgi/configserver/cse/cse.conf
+  register: cse_check
+  changed_when: false
+  always_run: yes
+  tags: always
+
+- name: Create cse_installed variable.
+  set_fact:
+    cse_installed: "{{ cse_check.stat.exists|bool }}"
+  always_run: yes
+  tags: always
+
+- name: Include the CSE Installer Task
+  include: install.yml
+  when: cse_installed != true and (install_cse is defined and install_cse == true)

@@ -1,0 +1,18 @@
+---
+- name: Check if RVSiteBuilder is installed
+  stat:
+    path: /var/cpanel/rvglobalsoft/rvsitebuilder/rvsBackup.pl
+  register: rvsb_check
+  changed_when: false
+  always_run: yes
+  tags: always
+
+- name: Create rvsb_installed variable.
+  set_fact:
+    rvsb_installed: "{{ rvsb_check.stat.exists|bool }}"
+  always_run: yes
+  tags: always
+
+- name: Include the RVSiteBuilder Installer Task
+  include: install.yml
+  when: rvsb_installed != true and (install_rvsitebuilder is defined and install_rvsitebuilder == true)

@@ -1,0 +1,4 @@
+---
+- name: Include the Composer Installer Task
+  include: install.yml
+  when: install_composer is defined and install_composer == true

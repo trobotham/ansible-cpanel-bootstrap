@@ -1,0 +1,42 @@
+---
+- name: Download RFX PRM gzipped tarball
+  get_url:
+    url: http://www.rfxn.com/downloads/prm-1.1.4.tar.gz
+    dest: /usr/src
+    force: yes
+  register: rfx_prm_downloaded
+  tags: rfx_prm
+
+- name: Unarchive RFX PRM source
+  unarchive:
+    src: /usr/src/prm-1.1.4.tar.gz
+    dest: /usr/src/
+    copy: no
+  register: rfx_prm_unarchived
+  when: rfx_prm_downloaded|changed
+  tags: rfx_prm
+
+- name: Install RFX PRM
+  shell: /bin/bash install.sh
+  args:
+    chdir: /usr/src/prm-1.1.4
+    creates: /usr/local/sbin/prm
+  when: rfx_prm_unarchived|changed
+  register: rfx_prm_install_completed
+  tags: rfx_prm
+
+- name: Update PRM config
+  lineinfile:
+    dest: /usr/local/prm/conf.prm
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^EMAIL_ALERT", line: 'EMAIL_ALERT="1"' }
+    - { regexp: "^EMAIL_ADDR", line: 'EMAIL_ADDR="{{ cron_email_address }}"' }
+    - { regexp: "^EMAIL_SUBJ", line: 'EMAIL_SUBJ="PRM - Process Resource Alert for {{ ansible_fqdn }}"' }
+    - { regexp: "^MAX_ETIME", line: 'MAX_ETIME="30:00"' }
+  tags: rfx_prm
+
+- name: Generate base comparision files
+  command: /usr/local/sbin/prm -g
+  tags: rfx_prm

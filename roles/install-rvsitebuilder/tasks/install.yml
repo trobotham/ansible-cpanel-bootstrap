@@ -1,0 +1,37 @@
+---
+- name: Ensure cPanel Apps directory exists
+  file:
+    path: /var/cpanel/apps/
+    state: directory
+    mode: 0755
+  tags: install_rvsitebuilder
+
+- name: Download RVSiteBuilder install script
+  get_url:
+    url: http://download.rvglobalsoft.com/rvsitebuilderinstall.sh
+    dest: /usr/src
+    force: yes
+  register: rvsb_downloaded
+  when: rvsb_installed == false
+  tags: install_rvsitebuilder
+
+- name: Install RVSiteBuilder
+  shell: '/usr/bin/yes | /bin/bash /usr/src/rvsitebuilderinstall.sh --dbuser="{{ rvsitebuilder_dbuser }}" --dbpassword="{{ rvsitebuilder_dbpassword }}" --dbname="{{ rvsitebuilder_dbname }}"'
+  args:
+    chdir: /tmp
+    creates: /usr/local/cpanel/whostmgr/docroot/cgi/rvsitebuilderinstaller/autoinstaller.cgi
+#  async: 1800 # wait up-to 30 minutes
+#  poll: 60 # check every 1 minutes
+  when: rvsb_downloaded|changed and rvsb_installed == false
+  register: rvsb_install_completed
+  tags: install_rvsitebuilder
+
+#  cd /usr/src;
+#  rm -fv rvsitebuilderinstall.sh;
+#  wget http://download.rvglobalsoft.com/rvsitebuilderinstall.sh;
+#  chmod +x rvsitebuilderinstall.sh;
+#  yes | ./rvsitebuilderinstall.sh --dbuser={{ rvsitebuilder_dbuser }} --dbpassword={{ rvsitebuilder_dbpassword }} --dbname={{ rvsitebuilder_dbname }}
+#  *Remark
+#  --dbpassword=Capital letters + lower letters + numerals
+#  --dbname=anything
+#  --dbuser=anything

@@ -22,7 +22,6 @@ centos_core_packages:
   - cronie
   - cronie-anacron
   - htop
-  - git
   - man
   - rsync
   - sudo

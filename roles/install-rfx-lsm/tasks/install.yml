@@ -1,0 +1,40 @@
+---
+- name: Download RFX LSM gzipped tarball
+  get_url:
+    url: http://www.rfxn.com/downloads/lsm-0.6.tar.gz
+    dest: /usr/src
+    force: yes
+  register: rfx_lsm_downloaded
+  tags: rfx_lsm
+
+- name: Unarchive RFX LSM source
+  unarchive:
+    src: /usr/src/lsm-0.6.tar.gz
+    dest: /usr/src/
+    copy: no
+  register: rfx_lsm_unarchived
+  when: rfx_lsm_downloaded|changed
+  tags: rfx_lsm
+
+- name: Install RFX LSM
+  shell: /bin/bash install.sh
+  args:
+    chdir: /usr/src/lsm-0.6
+    creates: /usr/local/sbin/lsm
+  when: rfx_lsm_unarchived|changed
+  register: rfx_lsm_install_completed
+  tags: rfx_lsm
+
+- name: Update LSM config
+  lineinfile:
+    dest: /usr/local/lsm/conf.lsm
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^USER", line: 'USER="{{ cron_email_address }}"' }
+    - { regexp: "^SUB", line: 'SUB="LSM Port Monitor Alert on {{ ansible_fqdn }}"' }
+  tags: rfx_lsm
+
+- name: Generate base comparision files
+  command: /usr/local/sbin/lsm -g
+  tags: rfx_lsm

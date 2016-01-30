@@ -1,0 +1,18 @@
+---
+- name: Check if RVSkin is installed
+  stat:
+    path: /root/rvadmin/auto_rvskin.pl
+  register: rvs_check
+  changed_when: false
+  always_run: yes
+  tags: always
+
+- name: Create rvs_installed variable.
+  set_fact:
+    rvs_installed: "{{ rvs_check.stat.exists|bool }}"
+  always_run: yes
+  tags: always
+
+- name: Include the RVSkin Installer Task
+  include: install.yml
+  when: rvs_installed != true and (install_rvskin is defined and install_rvskin == true)

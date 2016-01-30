@@ -1,0 +1,48 @@
+---
+- name: Download RFX LMD gzipped tarball
+  get_url:
+    url: http://www.rfxn.com/downloads/maldetect-1.5.tar.gz
+    dest: /usr/src
+    force: yes
+  register: rfx_lmd_downloaded
+  tags: rfx_lmd
+
+- name: Unarchive RFX LMD source
+  unarchive:
+    src: /usr/src/maldetect-1.5.tar.gz
+    dest: /usr/src/
+    copy: no
+  register: rfx_lmd_unarchived
+  when: rfx_lmd_downloaded|changed
+  tags: rfx_lmd
+
+- name: Install RFX LMD
+  shell: /bin/bash install.sh
+  args:
+    chdir: /usr/src//maldetect-1.5
+    creates: /usr/local/sbin/maldet
+  when: rfx_lmd_unarchived|changed
+  register: rfx_lmd_install_completed
+  tags: rfx_lmd
+
+- name: Add maldet to crontab at a random hour
+  cron:
+    name: "Run Maldet"
+    hour: "{{ 3|random}}"
+    minute: "{{ 57 |random}}"
+    job: "/usr/local/sbin/maldet -b -a /home/?/public_html"
+    state: present
+  changed_when: False
+  when: rfx_lmd_install_completed|changed
+  tags: rfx_lmd
+
+- name: Update LMD config
+  lineinfile:
+    dest: /usr/local/maldetect/conf.maldet
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^email_alert", line: 'email_alert="1"' }
+    - { regexp: "^email_addr", line: 'email_addr="{{ cron_email_address }}"' }
+  tags: rfx_lmd
+

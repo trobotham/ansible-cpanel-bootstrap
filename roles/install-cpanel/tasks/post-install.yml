@@ -1,0 +1,52 @@
+---
+# file: roles/cpanel/tasks/post-install.yml
+#
+# cPanel Role
+# Task for handling custom settings after cPanel is installed
+#
+
+- name: cPanel config customization
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: "etc/wwwacct.conf.j2", dest: "/etc/wwwacct.conf", mode: "0644" }
+    - { src: "var/cpanel/maxemailsperhour.j2", dest: "/var/cpanel/maxemailsperhour", mode: "0644" }
+  tags: cpanel
+
+- name:  disable the cPanel setup wizard
+  file:
+    path: /etc/.whostmgrft
+    state: touch
+    owner: root
+    group: root
+    mode: 0644
+  changed_when: false
+  tags: cpanel
+
+- name: ensure hostname in /etc/localdomains
+  lineinfile:
+    regexp: "^{{ ansible_fqdn }}$"
+    dest: /etc/localdomains
+    line: "{{ ansible_fqdn }}"
+    owner: root
+    group: mail
+    mode: 0640
+  tags: cpanel
+
+- name: traceroute protection
+  file:
+    path: /bin/traceroute
+    mode: 0700
+  tags: cpanel
+
+- name: TMPWatch Cron
+  cron:
+    name: "TMPWatch"
+    minute: "*/30"
+    job: "/usr/sbin/tmpwatch --mtime --nosymlinks 4 /tmp"
+    state: present
+  tags: cpanel

@@ -1,0 +1,18 @@
+---
+- name: Check if Attracta cPanel plugin is installed
+  stat:
+    path: /usr/local/cpanel/3rdparty/attracta/scripts/configure-attracta
+  register: attracta_check
+  changed_when: false
+  always_run: yes
+  tags: always
+
+- name: Create attracta_installed variable.
+  set_fact:
+    attracta_installed: "{{ attracta_check.stat.exists|bool }}"
+  always_run: yes
+  tags: always
+
+- name: Include the Attracta Installer Task
+  include: install.yml
+  when: attracta_installed != true and (install_attracta is defined and install_attracta == true)

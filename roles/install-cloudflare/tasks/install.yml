@@ -1,0 +1,42 @@
+---
+- name: Cloudflare Apache Module Setup
+  command: /bin/bash /var/lithium/scripts/cloudflare_setup.sh
+  args:
+    chdir: /var/lithium/scripts
+  tags: install_cloudflare
+
+#- name: Download CloudFlare cPanel Plugin installer
+#  get_url:
+#    url: https://raw.githubusercontent.com/cloudflare/CloudFlare-CPanel/master/cloudflare.install.sh
+#    dest: /usr/src/cloudflare_install.sh
+#  tags: install_cloudflare
+#
+#- name: Install CloudFlare cPanel Plugin
+#  shell: '/bin/bash /usr/src/cloudflare_install.sh {{ cloudflare_key }} "{{ cloudflare_company }}" {{ cloudflare_mode }}'
+#  args:
+#    chdir: /usr/src
+#    creates: /usr/local/cpanel/etc/cloudflare.json
+#    executable: /bin/bash
+#  tags: install_cloudflare
+
+- name: Install CloudFlare cPanel Plugin
+  shell: '/bin/bash <(curl -s https://raw.githubusercontent.com/cloudflare/CloudFlare-CPanel/master/cloudflare.install.sh) {{ cloudflare_key }} "{{ cloudflare_company }}" {{ cloudflare_mode }}'
+  args:
+    chdir: /usr/src
+    creates: /usr/local/cpanel/etc/cloudflare.json
+    executable: /bin/bash
+  tags: install_cloudflare
+
+- name: Check if hook installed
+  shell: /usr/local/cpanel/bin/manage_hooks list | grep /usr/local/cpanel/3rdparty/bin/cloudflare/default-on.php
+  register: cloudflare_hook_check
+  changed_when: false
+  always_run: yes
+  ignore_errors: true
+  tags: install_cloudflare
+
+- name: Install the CloudFlare cPanel Hook
+  command: /usr/local/cpanel/bin/manage_hooks add script /usr/local/cpanel/3rdparty/bin/cloudflare/default-on.php
+  when: cloudflare_hook_check|failed
+  register: cloudflare_hook_installed
+  tags: install_cloudflare

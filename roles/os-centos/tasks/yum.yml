@@ -10,6 +10,12 @@
     state: latest
   tags: yum
 
+- name: yum | Ensure libselinux-python is installed (before updating CentOS packages)
+  yum:
+    name: libselinux-python
+    state: latest
+  tags: yum
+
 - name: yum | Import repo GPG key(s)
   copy:
     src: "{{ item }}"

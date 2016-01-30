@@ -1,0 +1,48 @@
+---
+- name: Download RFX SIM gzipped tarball
+  get_url:
+    url: http://www.rfxn.com/downloads/sim-3.0.tar.gz
+    dest: /usr/src
+    force: yes
+  register: rfx_sim_downloaded
+  tags: rfx_sim
+
+- name: Unarchive RFX SIM source
+  unarchive:
+    src: /usr/src/sim-3.0.tar.gz
+    dest: /usr/src/
+    copy: no
+  register: rfx_sim_unarchived
+  when: rfx_sim_downloaded|changed
+  tags: rfx_sim
+
+- name: Install RFX SIM
+  shell: /bin/bash setup -q
+  args:
+    chdir: /usr/src/sim-3.0
+    creates: /usr/local/sbin/sim
+  when: rfx_sim_unarchived|changed
+  register: rfx_sim_install_completed
+  tags: rfx_sim
+
+- name: Update SIM config
+  lineinfile:
+    dest: /usr/local/sim/config/conf.sim
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^EMAIL", line: 'EMAIL="{{ cron_email_address }}"' }
+    - { regexp: "^SUBJ", line: 'SUBJ="SIM - Status alert from {{ ansible_fqdn }}"' }
+  tags: rfx_sim
+
+- name: Update SIM modules config
+  lineinfile:
+    dest: /etc/sim.mods
+    regexp: "^{{ item.option }}"
+    line: "{{ item.option }} {{ item.setting }}"
+  with_items: sim_mod_settings
+  tags: rfx_sim
+
+- name: Install Cron job
+  command: /usr/local/sbin/sim -j on
+  tags: rfx_sim

@@ -9,29 +9,43 @@
   become: yes
   roles:
     - os-centos
-#    - os-cloudlinux
-#    - kernelcare
-    - cpanel
-#    - app-postgresql
-#    - app-configserver
-#    - app-rfx
-#    - cpanel-plugins
-#    - app-rvskin
-#    - app-rvsitebuilder
-#    - app-softaculous
-#    - app-cloudflare
-#    - monitoring-icinga
+    - install-kernelcare
+    - install-cpanel
+    - install-cloudlinux
+    - install-cloudlinux-cagefs
+    - install-cloudlinux-alt-packages
+    - install-composer
+    - install-configserver-csf
+    - install-configserver-cmc
+    - install-configserver-cmm
+    - install-configserver-cmq
+    - install-configserver-cse
+    - install-configserver-cxs
+    - install-rvskin
+    - install-rvsitebuilder
+    - install-softaculous
+    - install-cloudflare
+    - install-attracta
+    - install-postgresql
+    - install-rfx-lmd
+    - install-rfx-lsm
+    - install-rfx-prm
+    - install-rfx-sim
+    - cpanel-comodo-waf
+    - li_cpanel_whm_plugins
 
+# SORRY, HAVEN'T EVEN STARTED YET!!!
 ################################################################
 ## ANSIBLE PLAYBOOK FOR CPANEL DEPLOYMENT TO DNS-ONLY SERVERS ##
 ################################################################
-- name: cPanel DNS Only Deployment to new CentOS 6.x Server
-  hosts: cpanel-dnsonly
-  any_errors_fatal: true
-  user: ansible
-  become: yes
-  roles:
-    - os-centos
+#- name: cPanel DNS Only Deployment to new CentOS 6.x Server
+#  hosts: cpanel-dnsonly
+#  any_errors_fatal: true
+#  user: ansible
+#  become: yes
+#  roles:
+#    - os-centos
+#    - install-cpanel-dnsonly
 #    - kernelcare
 #    - cpanel-dnsonly
 #    - app-configserver

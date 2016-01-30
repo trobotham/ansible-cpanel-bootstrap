@@ -1,0 +1,22 @@
+---
+- name: Download Attracta script
+  get_url:
+    url: https://cdn.attracta.com/static/download/cpanel-install
+    dest: /usr/src
+    force: yes
+  register: attracta_downloaded
+  tags: install_attracta
+
+- name: Install Attracta
+  command: /bin/bash /usr/src/cpanel-install
+  args:
+    chdir: /usr/src
+    creates: /usr/local/cpanel/3rdparty/attracta/scripts/configure-attracta
+  when: attracta_downloaded|changed
+  register: attracta_install_completed
+  tags: install_attracta
+
+- name: Configure Attracta
+  shell: "echo {{ attracta_key }} | /usr/local/cpanel/3rdparty/attracta/scripts/link_server.pl"
+  when: attracta_install_completed|changed
+  tags: install_attracta

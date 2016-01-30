@@ -32,10 +32,27 @@
 - name: Include the ssh tasks file
   include: ssh.yml
   when: use_ssh is defined and use_ssh == true
-  tags: ssh
+  tags: sshd
 
 ### locale Management
 - name: Include the local tasks file
   include: locale.yml
   when: use_locale is defined and use_locale == true
   tags: locale
+
+- name: Disable UseRoaming
+  lineinfile:
+    dest: /etc/ssh/ssh_config
+    regexp: "^UseRoaming"
+    line: "UseRoaming no"
+    state: present
+  tags: ssh_client
+
+- name: Maintain motd
+  copy:
+    src: etc/motd
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: 0644
+  tags: centos

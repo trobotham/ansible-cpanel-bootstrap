@@ -1,0 +1,93 @@
+#!/bin/sh
+# logview-install.sh - Installation script for LogView 
+# (c) 2006, LogView - File System Log Viewer
+# This code is subject to the cpanel license. Unauthorized copying is prohibited
+# more info about LogView please visit http://www.log-view.com
+MIRROR="http://www.log-view.com/"
+DOWNDIR="/var/lib/logview/"
+logviewfile="logview-current.tar.gz"
+logviewUrlFile="http://www.log-view.com/logview-current.tar.gz"
+logviewAddonFile="/usr/local/cpanel/whostmgr/docroot/cgi/logview/lview.cgi"
+logviewRegFile="/var/cpanel/apps/lview.conf"
+logviewOldFile="addon_lview.cgi"
+
+if [ "$UID" -ne "0" ]; then
+	echo " You need to be root to run logview-install script"
+	exit 1
+fi
+if [ ! -d "/usr/local/cpanel" ]; then
+	echo " Could not find the cpanel directory"
+	exit 1
+fi 
+if [ ! -d "/usr/local/cpanel/whostmgr/docroot/themes/x" ]; then
+	echo " Could not find the X theme directory"
+	exit 1
+fi
+if [ -d "$DOWNDIR" ]; then 
+	cd $DOWNDIR
+else
+	mkdir $DOWNDIR
+	cd $DOWNDIR
+fi
+
+wget "$logviewUrlFile"
+if [ ! -f "$logviewfile" ]; then 
+	echo "Could not download LogView files..."
+	echo "Exiting: Please Contact www.log-view.com" 
+	exit 1
+fi
+echo "Trying to install LogView.."
+tar -zxvf $logviewfile
+cd ~
+if [ -f "/etc/logview" ]; then
+        echo "Have to remove old directory..."
+        rm -fv /etc/logview*
+fi
+if [ -d "/etc/logview" ]; then
+	echo "Have to remove old directory..."
+	rm -rfv /etc/logview
+else 
+	echo "Installing LogView to /cgi/logview"
+	rm -rfv /usr/local/cpanel/whostmgr/docroot/cgi/logview
+	mkdir /usr/local/cpanel/whostmgr/docroot/cgi/logview
+fi
+if [ -f "$logviewOldFile" ]; then
+        echo "Older Addon LogView File Exists..."
+        rm -fv /usr/local/cpanel/whostmgr/docroot/cgi/addon_lview.cgi
+fi
+echo "Installing Addon Scripts"
+if [ -f "$logviewAddonFile" ]; then
+	echo "Have to remove old files..."
+	rm -fv /usr/local/cpanel/whostmgr/docroot/cgi/logview/lview.cgi
+	echo "Installing the new file..."
+	cp -fv /var/lib/logview/lview.cgi /usr/local/cpanel/whostmgr/docroot/cgi/logview
+	cp -fv /var/lib/logview/download.png /usr/local/cpanel/whostmgr/docroot/cgi/logview
+	cp -fv /var/lib/logview/rotate.png /usr/local/cpanel/whostmgr/docroot/cgi/logview
+	cp -fv /var/lib/logview/version.txt /usr/local/cpanel/whostmgr/docroot/cgi/logview
+	cp -fv /var/lib/logview/readme.txt /usr/local/cpanel/whostmgr/docroot/cgi/logview
+else
+	echo "Installing the Add-On files..."
+	cp -fv /var/lib/logview/lview.cgi /usr/local/cpanel/whostmgr/docroot/cgi/logview
+	cp -fv /var/lib/logview/download.png /usr/local/cpanel/whostmgr/docroot/cgi/logview
+	cp -fv /var/lib/logview/rotate.png /usr/local/cpanel/whostmgr/docroot/cgi/logview
+        cp -fv /var/lib/logview/version.txt /usr/local/cpanel/whostmgr/docroot/cgi/logview
+        cp -fv /var/lib/logview/readme.txt /usr/local/cpanel/whostmgr/docroot/cgi/logview
+fi
+if [ -f "$logviewRegFile" ]; then
+        echo "LogView Config File Exists..."
+else
+        echo "Registering LogView..."
+        cp -fv /var/lib/logview/lview.conf /var/cpanel/apps
+        /usr/local/cpanel/bin/register_appconfig /var/cpanel/apps/lview.conf
+	/usr/local/cpanel/bin/update_appconfig_apps
+fi
+
+echo "Cleaning up..."
+rm -rfv /var/lib/logview
+rm -rfv /etc/logview	
+rm -fv /usr/local/cpanel/whostmgr/docroot/cgi/logview/index.html
+rm -fv /usr/local/cpanel/whostmgr/docroot/cgi/logview/logview-current.tar.gz
+rm -fv /usr/local/cpanel/whostmgr/docroot/cgi/addon_lview.cgi
+echo "**********************************"
+echo "* LogView Installation Completed *"
+echo "**********************************"

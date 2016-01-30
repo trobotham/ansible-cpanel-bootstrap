@@ -1,0 +1,37 @@
+---
+- name: Download CloudLinux installer
+  get_url:
+    url: http://repo.cloudlinux.com/cloudlinux/sources/cln/cldeploy
+    dest: /usr/src
+    force: yes
+  register: cloudlinux_downloaded
+  when: cloudlinux_installed == false
+  tags: install_cloudlinux
+
+- name: Install CloudLinux
+  command: /bin/bash /usr/src/cldeploy -i
+  args:
+    chdir: /usr/src
+#    creates: /usr/bin/cldetect
+  async: 3600 #wait up-to 90 minutes
+  poll: 300 #check every 5 minutes
+  tags: install_cloudlinux
+
+- name: restart server
+  command: shutdown -r now "Ansible updates triggered"
+  async: 0
+  poll: 0
+  ignore_errors: true
+  tags: install_cloudlinux
+
+- name: waiting for server to come back
+  local_action: wait_for host={{ inventory_hostname }} state=started
+  become: false
+  tags: install_cloudlinux
+
+- name: Fix tmpwatch cron to not delete links
+  lineinfile:
+    regexp: "flags=-umc"
+    line: "flags=-umcl"
+    dest: /etc/cron.daily/tmpwatch
+  tags: install_cloudlinux

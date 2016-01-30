@@ -23,6 +23,6 @@
     user: "{{ item.name }}"
     key: "{{ item.key }}"
   no_log: true
-  with_items: user_ssh_keys
+  with_items: ssh_users
   when: (item.name is defined and item.name and item.name != 'root')
   tags: users
