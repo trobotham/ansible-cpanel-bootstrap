@@ -12,7 +12,7 @@
 
 - name: Create composer_istalled variable.
   set_fact:
-    composer_istalled: "{{ composer_bin.stat.exists.stat.exists|bool }}"
+    composer_istalled: "{{ composer_bin.stat.exists|bool }}"
   always_run: yes
   tags: always
 
